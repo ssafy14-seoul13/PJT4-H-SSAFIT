@@ -1,5 +1,5 @@
 package com.ssafit.Dao;
 
-public class UserDao {
+public interface UserDao {
 
 }
