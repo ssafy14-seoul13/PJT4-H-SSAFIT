@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Video {
 	
+	private static int no = 1; // 모든 클래스에서 공유하고, id에 부여할 고유번호
 	private int id;
 	private int viewCnt;
 	private String title;
@@ -16,14 +17,14 @@ public class Video {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Video(int id, int viewCnt, String title, String url, String part, String channelName, Date regDate) {
-		this.id = id;
-		this.viewCnt = viewCnt;
+	public Video(String title, String url, String part, String channelName) {
+		this.id = no++;
+		this.viewCnt = 0;
 		this.title = title;
 		this.url = url;
 		this.part = part;
 		this.channelName = channelName;
-		this.regDate = regDate;
+		this.regDate = new Date();
 	}
 
 	public int getId() {
