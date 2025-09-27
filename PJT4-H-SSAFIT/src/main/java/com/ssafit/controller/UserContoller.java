@@ -83,7 +83,7 @@ public class UserContoller extends HttpServlet {
 		
 		int userId = Integer.parseInt(request.getParameter("userId"));
 		
-		userService.userSignOut(userId);
+		userService.userLogOut(userId);
 		request.getSession().invalidate();
 		response.sendRedirect("user?act=login");
 		
