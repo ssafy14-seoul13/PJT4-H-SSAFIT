@@ -2,7 +2,9 @@ package com.ssaft.Dto;
 
 public class User {
 	
-	private int userID;
+	private static int no = 1; //id에 부여할 고유번호
+	private int userId;
+	private String userName;
 	private String userEmail;
 	private String userPassword;
 	
@@ -10,18 +12,27 @@ public class User {
 		// TODO Auto-generated constructor stub
 	}
 
-	public User(int userID, String userEmail, String userPassword) {
-		this.userID = userID;
+	public User(String userName, String userEmail, String userPassword) {
+		this.userId = no++;
+		this.userName = userName;
 		this.userEmail = userEmail;
 		this.userPassword = userPassword;
 	}
 
-	public int getUserID() {
-		return userID;
+	public int getUserId() {
+		return userId;
 	}
 
-	public void setUserID(int userID) {
-		this.userID = userID;
+	public void setUserId(int userID) {
+		this.userId = userID;
+	}
+	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getUserEmail() {
@@ -42,7 +53,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [userID=" + userID + ", userEmail=" + userEmail + ", userPassword=" + userPassword + "]";
+		return "User [userID=" + userId + ", userEmail=" + userEmail + ", userPassword=" + userPassword + "]";
 	}
 	
 	

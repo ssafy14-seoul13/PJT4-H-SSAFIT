@@ -1,6 +1,18 @@
 package com.ssafit.controller;
 
-@@WebServlet("/user")
+import java.io.IOException;
+
+import com.ssafit.service.UserService;
+import com.ssaft.Dto.User;
+import com.ssaft.serviceImpl.UserServiceImpl;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@WebServlet("/user")
 public class UserContoller extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -28,59 +40,62 @@ public class UserContoller extends HttpServlet {
 			doRemove(request,response);
 			break;
 		}
+	}
 		
-		private void doSignUpForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			request.getRequestDispatcher("/user/userSignUp.jsp").forward(request, response);
-		}
-		
-		private void doSignUp(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-			String userEmail = request.getParameter("userEmail");
-			String userPassword = request.getParameter("userPassword");
+	private void doSignUpForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getRequestDispatcher("/user/userSignUp.jsp").forward(request, response);
+	}
 	
-			User user = new User (userEmail, userPassword, userNickName);
-			
-			userService.userSignUp(user);
+	private void doSignUp(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+		String userEmail = request.getParameter("userEmail");
+		String userPassword = request.getParameter("userPassword");
+		String userName = request.getParameter("userName");
 
-			response.sendRedirect(request.getContextPath() + "/index.jsp");
-		}
+		User user = new User (userEmail, userPassword, userName);
 		
-		private void doLogIn(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		userService.userSignUp(user);
 
-			String userEmail = request.getParameter("userEmail");
-			String userPassword = request.getParameter("userPassword");
-			
-			User user = new User (userEmail, userPassword);
-			
-			User LogInUser = userService.userLogIn(user);
-			
-			if (LogInUser != null) {
-				request.getSession().setAttribute("LogInUser", LogInUser);
-				response.sendRedirect("user?act=page&userId=" + LogInUser.getUserId());
-			} else {
-				response.sendRedirect("user?act=login");
-			}
 
-			
-		}
-		private void doLogOut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-			
-			int userId = Integer.parseInt(request.getParameter("userId"));
-			
-			userService.userSignOut(userId);
-			request.getSession().invalidate();
+		response.sendRedirect(request.getContextPath() + "/index.jsp");
+	}
+	
+	private void doLogIn(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		String userEmail = request.getParameter("userEmail");
+		String userPassword = request.getParameter("userPassword");
+		String userName = request.getParameter("userName");
+		
+		User user = new User (userEmail, userPassword, userName);
+		
+		User LogInUser = userService.userLogIn(user);
+		
+		if (LogInUser != null) {
+			request.getSession().setAttribute("LogInUser", LogInUser);
+			response.sendRedirect("user?act=page&userId=" + LogInUser.getUserId());
+		} else {
 			response.sendRedirect("user?act=login");
-			
 		}
 
-		private void doRemove(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+	}
+	private void doLogOut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		int userId = Integer.parseInt(request.getParameter("userId"));
+		
+		userService.userSignOut(userId);
+		request.getSession().invalidate();
+		response.sendRedirect("user?act=login");
+		
+	}
 
-			int userId = Integer.parseInt(request.getParameter("userId"));
-			
-			userService.userDelete(userId);
-			response.sendRedirect("user?act=login");
+	private void doRemove(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-			
-		}
+		int userId = Integer.parseInt(request.getParameter("userId"));
+		
+		userService.userDelete(userId);
+		response.sendRedirect("user?act=login");
+
+		
+	}
 }

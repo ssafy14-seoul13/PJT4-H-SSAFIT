@@ -10,7 +10,7 @@ public class VideoDaoImpl implements VideoDao {
 	private List<Video> videoList = new ArrayList<>();
 
 	// 싱글턴으로 구현
-	private static VideoDao dao = new VideoDaoImpl();
+	private static VideoDao VideoDao = new VideoDaoImpl();
 	
 	private VideoDaoImpl() {
 		putDummyVideo();
@@ -28,7 +28,7 @@ public class VideoDaoImpl implements VideoDao {
 	}
 
 	public static VideoDao getInstance() {
-		return dao;
+		return VideoDao;
 	}
 	
 	@Override

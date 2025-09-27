@@ -1,5 +1,7 @@
 package com.ssafit.Dao;
 
+import com.ssaft.Dto.User;
+
 public interface UserDao {
 
 	
@@ -7,7 +9,7 @@ public interface UserDao {
 	public abstract void signUp(User user);
 	
 	//로그인
-	public abstract void login(User user);
+	public abstract User logIn(User user);
 	
 	//로그아웃
 	public abstract void logOut(int userId);
