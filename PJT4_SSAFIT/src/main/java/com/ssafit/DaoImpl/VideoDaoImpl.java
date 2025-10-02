@@ -1,69 +1,217 @@
 package com.ssafit.DaoImpl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 import com.ssafit.Dao.VideoDao;
 import com.ssafit.Dto.Video;
+import com.ssafy.board.util.DBUtil;
 
 public class VideoDaoImpl implements VideoDao {
 	
-	private List<Video> videoList = new ArrayList<>();
+	private DBUtil util = DBUtil.getInstance();
 
 	// 싱글턴으로 구현
 	private static VideoDao VideoDao = new VideoDaoImpl();
 	
 	private VideoDaoImpl() {
-		putDummyVideo();
-	}
-	
-	private void putDummyVideo() {
-		videoList.add(new Video("전신 다이어트 최고의 운동 [칼소폭 찐 핵핵매운맛]", "https://www.youtube.com/embed/gMaB-fG4u4g", "전신", "ThankyouBUBU"));
-		videoList.add(new Video("하루 15분! 전신 칼로리 불태우는 다이어트 운동", "https://www.youtube.com/embed/swRNeYw1JkY", "전신",  "ThankyouBUBU"));
-		videoList.add(new Video("상체 다이어트 최고의 운동 BEST [팔뚝살/겨드랑이살/등살/가슴어깨라인]", "https://www.youtube.com/embed/54tTYO-vU2E", "상체","ThankyouBUBU"));
-		videoList.add(new Video( "상체비만 다이어트 최고의 운동 [상체 핵매운맛]", "https://www.youtube.com/embed/QqqZH3j_vH0", "상체",  "ThankyouBUBU"));
-		videoList.add(new Video("하체운동이 중요한 이유? 이것만 보고 따라하자 ! [하체운동 교과서]", "https://www.youtube.com/embed/tzN6ypk6Sps", "하체", "김강민"));
-		videoList.add(new Video( "저는 하체 식주의자 입니다",  "https://www.youtube.com/embed/u5OgcZdNbMo", "하체", "GYM종국"));
-		videoList.add(new Video("11자복근 복부 최고의 운동 [복근 핵매운맛]", "https://www.youtube.com/embed/PjGcOP-TQPE",  "복부", "ThankyouBUBU"));
-		videoList.add(new Video("(Sub)누워서하는 5분 복부운동!! 효과보장! (매일 2주만 해보세요!)", "https://www.youtube.com/embed/7TLk7pscICk",  "복부", "SomiFit"));
 	}
 
 	public static VideoDao getInstance() {
 		return VideoDao;
 	}
+	// 싱글턴
 	
 	@Override
 	public void insert(Video video) {
-		videoList.add(video);
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		Statement stmt = null;
+		
+		String sql = "INSERT INTO video (title, url, part, channel_name) VALUES(?, ?, ?, ?)";
+		
+		try {
+			conn = util.getConnection();
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, video.getTitle());
+			pstmt.setString(2, video.getUrl());
+			pstmt.setString(3, video.getPart());
+			pstmt.setString(4, video.getChannelName());
+			
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		finally {
+			util.close(pstmt, conn);
+		}
+	
 	}
 
 	@Override
 	public Video select(int id) {
-		return videoList.get(id);
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		String sql = "SELECT * FROM video WHERE id=?";
+		Video video = null;
+		
+		try {
+			conn = util.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				video = new Video();
+				video.setId(rs.getInt(1));
+				video.setViewCnt(rs.getInt(2));
+				video.setTitle(rs.getString(3));
+				video.setUrl(rs.getString(4));
+				video.setPart(rs.getString(5));
+				video.setChannelName(rs.getString(6));
+				video.setRegDate(rs.getTimestamp(7));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		finally {
+			util.close(rs,pstmt,conn);
+		}
+		
+		return video;
 	}
 
 	@Override
 	public void updateViewCount(int id) {
-		Video nowVideo = videoList.get(id);
-		nowVideo.setViewCnt(nowVideo.getViewCnt()+1);
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = "UPDATE board SET view_cnt = view_cnt+1 WHERE id=?";
+		
+		try {
+			conn = util.getConnection();
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		finally {
+			util.close(pstmt, conn);
+		}
+		
 	}
 
 	@Override
 	public List<Video> selectAll() {
+		
+		List<Video> videoList = new ArrayList<>();
+		
+		String sql = "SELECT * FROM video";
+		
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = util.getConnection();
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				
+				Video video = new Video();
+				
+				video.setId(rs.getInt(1));
+				video.setViewCnt(rs.getInt(2));
+				video.setTitle(rs.getString(3));
+				video.setUrl(rs.getString(4));
+				video.setPart(rs.getString(5));
+				video.setChannelName(rs.getString(6));
+				video.setRegDate(rs.getTimestamp(7));
+				
+				videoList.add(video);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			util.close(rs, stmt, conn);
+		}
+		
 		return videoList;
 	}
 
 	@Override
 	public void delete(int id) {
-		videoList.remove(id);
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		String sql = "DELETE FROM video WHERE id=?";
+		
+		try {
+			conn = util.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			util.close(pstmt, conn);
+		}
+		
 	}
 
 	@Override
 	public void update(Video video) {
 		
-		int n = videoList.indexOf(video);
-		videoList.remove(n);
-		videoList.add(n,video);
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = "UPDATE video SET title=?, url=?, part=?, channel_name=?";
 		
-	}
+		try {
+			conn = util.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, video.getTitle());
+			pstmt.setString(2, video.getUrl());
+			pstmt.setString(3, video.getPart());
+			pstmt.setString(4, video.getChannelName());
+			
+			pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			util.close(pstmt, conn);
+		}
+		
+	} 
 
 }
