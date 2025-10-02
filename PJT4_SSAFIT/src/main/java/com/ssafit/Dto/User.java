@@ -2,7 +2,6 @@ package com.ssafit.Dto;
 
 public class User {
 	
-	private static int no = 1; //id에 부여할 고유번호
 	private int userId;
 	private String userName;
 	private String userEmail;
@@ -13,7 +12,6 @@ public class User {
 	}
 
 	public User(String userName, String userEmail, String userPassword) {
-		this.userId = no++;
 		this.userName = userName;
 		this.userEmail = userEmail;
 		this.userPassword = userPassword;

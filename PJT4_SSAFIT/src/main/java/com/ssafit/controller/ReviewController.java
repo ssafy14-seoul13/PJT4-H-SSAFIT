@@ -67,8 +67,9 @@ public class ReviewController extends HttpServlet {
         String title = request.getParameter("title");
         String writer = request.getParameter("writer");
         String content = request.getParameter("content");
+  
         
-        Review review = new Review(videoId, 0, writer, title, content, new Date());
+        Review review = new Review(videoId, 0, writer, title, content);
         
         reviewService.insertReview(review);
         
@@ -105,7 +106,7 @@ public class ReviewController extends HttpServlet {
         String writer = request.getParameter("writer");
         String content = request.getParameter("content");
         
-        Review review = new Review(videoId, reviewId, writer, title, content, new Date());
+        Review review = new Review(videoId, reviewId, writer, title, content);
         
         reviewService.updateReview(review);
         

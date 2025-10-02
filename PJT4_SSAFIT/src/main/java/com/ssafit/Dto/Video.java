@@ -1,30 +1,27 @@
 package com.ssafit.Dto;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Video {
 	
-	private static int no = 1; // 모든 클래스에서 공유하고, id에 부여할 고유번호
 	private int id;
 	private int viewCnt;
 	private String title;
 	private String url;
 	private String part;
 	private String channelName;
-	private Date regDate;
+	private Timestamp regDate;
 	
 	public Video() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public Video(String title, String url, String part, String channelName) {
-		this.id = no++;
 		this.viewCnt = 0;
 		this.title = title;
 		this.url = url;
 		this.part = part;
 		this.channelName = channelName;
-		this.regDate = new Date();
 	}
 
 	public int getId() {
@@ -75,11 +72,11 @@ public class Video {
 		this.channelName = channelName;
 	}
 
-	public Date getRegDate() {
+	public Timestamp getRegDate() {
 		return regDate;
 	}
 
-	public void setRegDate(Date regDate) {
+	public void setRegDate(Timestamp regDate) {
 		this.regDate = regDate;
 	}
 

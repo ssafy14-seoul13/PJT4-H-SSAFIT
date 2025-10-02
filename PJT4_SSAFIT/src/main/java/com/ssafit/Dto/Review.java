@@ -1,6 +1,6 @@
 package com.ssafit.Dto;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Review {
 
@@ -9,7 +9,7 @@ public class Review {
 	private String writer;
 	private String title;
 	private String content;
-	private Date regDate;
+	private Timestamp regDate;
 	
 	public Review() {
 		// TODO Auto-generated constructor stub
@@ -17,13 +17,12 @@ public class Review {
 	
 	
 
-	public Review(int videoId, int reviewId, String writer, String title, String content, Date regDate) {
+	public Review(int videoId, int reviewId, String writer, String title, String content) {
 		this.videoId = videoId;
 		this.reviewId = reviewId;
 		this.writer = writer;
 		this.title = title;
 		this.content = content;
-		this.regDate = regDate;
 	}
 
 
@@ -68,11 +67,11 @@ public class Review {
 		this.content = content;
 	}
 
-	public Date getRegDate() {
+	public Timestamp getRegDate() {
 		return regDate;
 	}
 
-	public void setRegDate(Date regDate) {
+	public void setRegDate(Timestamp regDate) {
 		this.regDate = regDate;
 	}
 
