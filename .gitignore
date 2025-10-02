@@ -23,3 +23,23 @@
 hs_err_pid*
 replay_pid*
 /.metadata/
+
+# Eclipse settings
+.classpath
+.project
+.settings/
+
+# STS / Spring Tool Suite
+.springBeans
+
+# Build directories
+/bin/
+/build/
+/target/
+
+# Tomcat server configs
+/Servers/
+
+# OS files
+.DS_Store
+Thumbs.db
